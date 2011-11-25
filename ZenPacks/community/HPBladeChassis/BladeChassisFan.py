@@ -22,7 +22,7 @@ class BladeChassisFan(DeviceComponent, ManagedEntity):
     bcfSparePartNumber = ""
     bcfProductVersion = ""
 
-    _properties = (
+    _properties = ManagedEntity._properties + (
 	dict(id='bcfNumber', type='int',  **_kw),
 	dict(id='bcfProductName', type='string',  **_kw),
 	dict(id='bcfStatus', type='string',  **_kw),
@@ -31,7 +31,7 @@ class BladeChassisFan(DeviceComponent, ManagedEntity):
 	dict(id='bcfProductVersion', type='string',	**_kw)
     )
 
-    _relations = (
+    _relations = ManagedEntity._relations + (
 	('bladechassis', ToOne(ToManyCont, 'ZenPacks.community.HPBladeChassis.BladeChassis', 'bladechassisfans')),
     )
 
@@ -41,23 +41,7 @@ class BladeChassisFan(DeviceComponent, ManagedEntity):
 	    'id'             : 'BladeChassisFan',
 	    'meta_type'      : 'Blade Chassis Fan',
 	    'description'    : 'Blade Chassis Fan Description',
-	    'icon'           : 'Device_icon.gif',
-	    'product'        : 'BladeChassisFans',
-	    'factory'        : 'manage_addBladeServer',
-	    'immediate_view' : 'bladeserverPerformance',
-	    'actions'        :
-	    (
-		{ 'id'            : 'perf'
-		, 'name'          : 'perf'
-		, 'action'        : 'bladeserverPerformance'
-		, 'permissions'   : (ZEN_VIEW, )
-		},
-		{ 'id'            : 'templates'
-		, 'name'          : 'Templates'
-		, 'action'        : 'objTemplates'
-		, 'permissions'   : (ZEN_CHANGE_SETTINGS, )
-		},
-	    )
+        'actions'        : (),
 	},
     )
 

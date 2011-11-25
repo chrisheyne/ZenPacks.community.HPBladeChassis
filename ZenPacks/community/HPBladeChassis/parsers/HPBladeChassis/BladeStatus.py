@@ -23,6 +23,7 @@ log = logging.getLogger("zen.zencommand")
 """
 Items to collect:
 bladeHealth
+bladePower
 bladePowerConsumed
 """
 
@@ -46,12 +47,20 @@ class BladeStatus(CommandParser):
             match = re.match('^([^:]+):.(.*)$', line.strip())
             if match:
                 (key, value) = match.groups()
+                print key, value
                 if "Health" in key:
                     if "OK" in value:
-                        result.values.append( (dps["bladeHealth"], float(0)) ) 
+                        result.values.append((dps["bladeHealth"], float(0))) 
                     else:
-                        result.values.append( (dps["bladeHealth"], float(1)) )
+                        result.values.append((dps["bladeHealth"], float(1)))
+                if "Power" in key:
+                    if "On" in value:
+                        result.values.append((dps["bladePower"], float(1)))
+                    elif "Off" in value:
+                        result.values.append((dps["bladePower"], float(0)))
+                    else:
+                        result.values.append((dps["bladePower"], None))
                 if "Current Wattage" in key:
-                        result.values.append( (dps["bladePowerConsumed"], float(value)) )
+                        result.values.append((dps["bladePowerConsumed"], float(value)))
 
         return result

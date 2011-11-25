@@ -35,28 +35,28 @@ class BladeServer(DeviceComponent, ManagedEntity):
     bsIloFirmwareVersion = ""
     snmpindex = -1
 
-    _properties = (
-	dict(id='bsDisplayName', type='string',  **_kw),
-	dict(id='bsId', type='string',  **_kw),
-	dict(id='bsPosition', type='int',  **_kw),
-	dict(id='bsHeight', type='int',  **_kw),
-	dict(id='bsWidth',	type='int',  **_kw),
-	dict(id='bsDepth',	type='int',  **_kw),
-	dict(id='bsSlotsUsed',type='int',  **_kw),
-	dict(id='bsSerialNum', type='string',	**_kw),
-	dict(id='bsProductId', type='string',	**_kw),
-	dict(id='bsPartNumber', type='string',	**_kw),
-	dict(id='bsSystemBoardPartNum', type='string',	**_kw),
-	dict(id='bsCPUType', type='string',	**_kw),
-	dict(id='bsCPUCount', type='int',	**_kw),
-	dict(id='bsNic1Mac', type='string',	**_kw),
-	dict(id='bsNic2Mac', type='string',	**_kw),
-	dict(id='bsIloIp', type='string',	**_kw),
-	dict(id='bsIloFirmwareVersion', type='string',	**_kw),
-	dict(id='bsInstalledRam', type='int',	**_kw)
+    _properties = ManagedEntity._properties + (
+	dict(id='bsDisplayName', type='string', **_kw),
+	dict(id='bsId', type='string', **_kw),
+	dict(id='bsPosition', type='int', **_kw),
+	dict(id='bsHeight', type='int', **_kw),
+	dict(id='bsWidth', 	type='int', **_kw),
+	dict(id='bsDepth', 	type='int', **_kw),
+	dict(id='bsSlotsUsed', type='int', **_kw),
+	dict(id='bsSerialNum', type='string', 	**_kw),
+	dict(id='bsProductId', type='string', 	**_kw),
+	dict(id='bsPartNumber', type='string', 	**_kw),
+	dict(id='bsSystemBoardPartNum', type='string', 	**_kw),
+	dict(id='bsCPUType', type='string', 	**_kw),
+	dict(id='bsCPUCount', type='int', 	**_kw),
+	dict(id='bsNic1Mac', type='string', 	**_kw),
+	dict(id='bsNic2Mac', type='string', 	**_kw),
+	dict(id='bsIloIp', type='string', 	**_kw),
+	dict(id='bsIloFirmwareVersion', type='string', 	**_kw),
+	dict(id='bsInstalledRam', type='int', 	**_kw)
     )
 
-    _relations = (
+    _relations = ManagedEntity._relations + (
 	('bladechassis', ToOne(ToManyCont, 'ZenPacks.community.HPBladeChassis.BladeChassis', 'bladeservers')),
     )
 
@@ -66,38 +66,37 @@ class BladeServer(DeviceComponent, ManagedEntity):
 	    'id'             : 'BladeServer',
 	    'meta_type'      : 'Blade Server',
 	    'description'    : 'Blade Server Description',
-	    'icon'           : 'Device_icon.gif',
-	    'product'        : 'BladeServers',
-	    'factory'        : 'manage_addBladeServer',
 	    'immediate_view' : 'viewBladeDetail',
 	    'actions'        :
 	    (
 		{ 'id'            : 'detail'
 		, 'name'          : 'Blade Detail'
 		, 'action'        : 'viewBladeDetail'
-		, 'permissions'   : (ZEN_VIEW, )
-		},
-		{ 'id'            : 'templates'
-		, 'name'          : 'Templates'
-		, 'action'        : 'objTemplates'
-		, 'permissions'   : (ZEN_CHANGE_SETTINGS, )
+		, 'permissions'   : (ZEN_VIEW,)
 		},
 	    )
 	},
     )
 
     def device(self):
-	return self.bladechassis()
+        return self.bladechassis()
 
+    def managedDevice(self):
+    	from Products.ZenModel.ZenModelRM import ZenModelRM
+    	d = self.getDmdRoot("Devices").findDevice(self.bsDisplayName)
+    	if d:
+    	    return d
+    	return self.bsDisplayName
+    
     def managedDeviceLink(self):
-	from Products.ZenModel.ZenModelRM import ZenModelRM
-	d = self.getDmdRoot("Devices").findDevice(self.bsDisplayName)
-	if d:
-	    return ZenModelRM.urlLink(d, 'link')
-	return None
+        from Products.ZenModel.ZenModelRM import ZenModelRM
+        d = self.getDmdRoot("Devices").findDevice(self.bsDisplayName)
+        if d:
+            return ZenModelRM.urlLink(d, 'link', attrs={'target':'_top'})
+        return None
 
     def snmpIgnore(self):
-	return ManagedEntity.snmpIgnore(self) or self.snmpindex < 0
-    
+        return ManagedEntity.snmpIgnore(self) or self.snmpindex < 0
+
 
 InitializeClass(BladeServer)

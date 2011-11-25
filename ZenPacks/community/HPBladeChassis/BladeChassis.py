@@ -34,43 +34,28 @@ class BladeChassis(Device):
     ) 
     
 
-    
+
     factory_type_information = (
 	{
-	    'immediate_view' : 'deviceStatus',
+        'immediate_view' : 'devicedetail',
 	    'actions'        : (
-		{ 'id'            : 'status'
-		, 'name'          : 'Status'
-		, 'action'        : 'deviceStatus'
-		, 'permissions'   : (ZEN_VIEW, )
-		},
 		{ 'id'            : 'bladechassisData'
 		, 'name'          : 'Chassis Details'
 		, 'action'        : 'bladechassisData'
 		, 'permissions'   : (ZEN_VIEW,)
 		},
-		{ 'id'            : 'bladeserverData'
-		, 'name'          : 'Blades'
-		, 'action'        : 'bladeserverData'
-		, 'permissions'   : (ZEN_VIEW,)
-		},
-		{ 'id'            : 'events'
-		, 'name'          : 'Events'
-		, 'action'        : 'viewEvents'
-		, 'permissions'   : (ZEN_VIEW, )
-		},
-		{ 'id'            : 'perfServer'
-		, 'name'          : 'Perf'
-		, 'action'        : 'viewDevicePerformance'
-		, 'permissions'   : (ZEN_VIEW, )
-		},
-		{ 'id'            : 'edit'
-		, 'name'          : 'Edit'
-		, 'action'        : 'editDevice'
-		, 'permissions'   : ("Change Device",)
-		},
+#		{ 'id'            : 'bladeserverData'
+#		, 'name'          : 'Blades'
+#		, 'action'        : 'bladeserverData'
+#		, 'permissions'   : (ZEN_VIEW,)
+#		},
 	    )
 	},
     )
+
+    def __init(self, *args, **kw):
+	Define.__init__(self, *args, **kw)
+	self.buildRelations()
+
 
 InitializeClass(BladeChassis)

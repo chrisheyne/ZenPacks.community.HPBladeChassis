@@ -24,18 +24,18 @@ class BladeChassisInterconnect(DeviceComponent, ManagedEntity):
     bciPartNumber = ""
     bciSparePartNumber = ""
 
-    _properties = (
+    _properties = ManagedEntity._properties + (
 	dict(id='bciNumber', type='int',  **_kw),
 	dict(id='bciType', type='string',  **_kw),
 	dict(id='bciProductName', type='string',  **_kw),
 	dict(id='bciStatus', type='string',  **_kw),
-    dict(id='bciMgmtIp', type='string', **_kw),
+	dict(id='bciMgmtIp', type='string', **_kw),
 	dict(id='bciSerialNum', type='string',  **_kw),
 	dict(id='bciPartNumber', type='string',  **_kw),
 	dict(id='bciSparePartNumber', type='string',  **_kw)
     )
 
-    _relations = (
+    _relations = ManagedEntity._relations + (
 	('bladechassis', ToOne(ToManyCont, 'ZenPacks.community.HPBladeChassis.BladeChassis', 'bladechassisinterconnects')),
     )
 
@@ -45,23 +45,7 @@ class BladeChassisInterconnect(DeviceComponent, ManagedEntity):
 	    'id'             : 'BladeChassisInterconnect',
 	    'meta_type'      : 'Blade Chassis Interconnect',
 	    'description'    : 'Blade Chassis Interconnect Description',
-	    'icon'           : 'Device_icon.gif',
-	    'product'        : 'BladeServers',
-	    'factory'        : 'manage_addBladeServer',
-	    'immediate_view' : 'bladeserverPerformance',
-	    'actions'        :
-	    (
-		{ 'id'            : 'perf'
-		, 'name'          : 'perf'
-		, 'action'        : 'bladeserverPerformance'
-		, 'permissions'   : (ZEN_VIEW, )
-		},
-		{ 'id'            : 'templates'
-		, 'name'          : 'Templates'
-		, 'action'        : 'objTemplates'
-		, 'permissions'   : (ZEN_CHANGE_SETTINGS, )
-		},
-	    )
+        'actions'        : (),
 	},
     )
 

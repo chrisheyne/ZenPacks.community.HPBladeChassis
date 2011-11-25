@@ -24,10 +24,10 @@ class BladeChassisPsu(DeviceComponent, ManagedEntity):
     bcpSparePartNumber = ""
     bcpProductVersion = ""
 
-    _properties = (
+    _properties = ManagedEntity._properties + (
 	dict(id='bcpNumber', type='int',  **_kw),
 	dict(id='bcpProductName', type='string',  **_kw),
-    dict(id='bcpStatus', type='string', **_kw),
+	dict(id='bcpStatus', type='string', **_kw),
 	dict(id='bcpCapacity', type='string',  **_kw),
 	dict(id='bcpSerialNum', type='string',  **_kw),
 	dict(id='bcpPartNumber', type='string',  **_kw),
@@ -35,7 +35,7 @@ class BladeChassisPsu(DeviceComponent, ManagedEntity):
 	dict(id='bcpProductVersion', type='string',  **_kw)
     )
 
-    _relations = (
+    _relations = ManagedEntity._relations + (
 	('bladechassis', ToOne(ToManyCont, 'ZenPacks.community.HPBladeChassis.BladeChassis', 'bladechassispsus')),
     )
 
@@ -46,22 +46,7 @@ class BladeChassisPsu(DeviceComponent, ManagedEntity):
 	    'meta_type'      : 'Blade Chassis Psu',
 	    'description'    : 'Blade Chassis Psu Description',
 	    'icon'           : 'Device_icon.gif',
-	    'product'        : 'BladeServers',
-	    'factory'        : 'manage_addBladeServer',
-	    'immediate_view' : 'bladeserverPerformance',
-	    'actions'        :
-	    (
-		{ 'id'            : 'perf'
-		, 'name'          : 'perf'
-		, 'action'        : 'bladeserverPerformance'
-		, 'permissions'   : (ZEN_VIEW, )
-		},
-		{ 'id'            : 'templates'
-		, 'name'          : 'Templates'
-		, 'action'        : 'objTemplates'
-		, 'permissions'   : (ZEN_CHANGE_SETTINGS, )
-		},
-	    )
+	    'actions'        : (),
 	},
     )
 

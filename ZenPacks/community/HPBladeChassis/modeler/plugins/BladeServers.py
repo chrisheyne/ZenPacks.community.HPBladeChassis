@@ -30,6 +30,7 @@ class BladeServers(CommandPlugin):
         log.info('Collecting Blade Servers for device %s' % device.id)
 
         bladeCount = 0 # keep track of what we've seen for various reasons
+        emptySlot = False
 
 
         resultslines = results.split("\n")
@@ -38,12 +39,15 @@ class BladeServers(CommandPlugin):
             if match:
                 # First line of a blade detail section, create object and get started
                 # If this isn't the first blade, we want to save the last one
-                if bladeCount > 0:
+                if bladeCount > 0 and not emptySlot:
                     rm.append(om)
                     # Save the hostname, so that if next blade is a storage blade
                     # We can tag it with it's host
                     oldHostName = om.bsDisplayName
+                emptySlot = False
                 # Now create the new object and initalise it some
+                # we initialise all the properties here, since if it's an empty
+                # slot we need to make sure nothing remains of a previous entry
                 # We set the snmpindex so that the collector is happy
                 om = self.objectMap()
                 om.bsPosition = int(match.groups()[0])
@@ -51,6 +55,15 @@ class BladeServers(CommandPlugin):
                 om.id = self.prepId("%s slot %2d" % (device.id, om.bsPosition))
                 om.bsInstalledRam = 0
                 om.bsCPUCount = 0
+                om.bsSerialNum = ""
+                om.bsPartNumber = ""
+                om.bsSystemBoardPartNum = ""
+                om.bsCPUType = ""
+                om.bsInstalledRam = ""
+                om.bsNic1Mac = ""
+                om.bsNic2Mac = ""
+                om.bsIloFirmwareVersion = ""
+                om.bsIloIp = ""
                 bladeCount = bladeCount + 1
                 log.debug("Found a blade header, processing blade %d with position %s" % (bladeCount, om.bsPosition))
                 continue
@@ -62,6 +75,7 @@ class BladeServers(CommandPlugin):
             if match:
                 # We need to set a bunch of default values for "no blade here" and continue
                 om.bsDisplayName = "Empty Slot"
+                emptySlot = True
                 continue
             match = re.match('^Type:.((Server|Storage|Unknown).*)$',line.strip())
             if match:
@@ -119,7 +133,7 @@ class BladeServers(CommandPlugin):
                 continue
 
         # append last object at end of loop
-        if bladeCount > 0:
+        if bladeCount > 0 and not emptySlot:
             rm.append(om)
 
         log.info("Finished processing results, %d blades found" % bladeCount)

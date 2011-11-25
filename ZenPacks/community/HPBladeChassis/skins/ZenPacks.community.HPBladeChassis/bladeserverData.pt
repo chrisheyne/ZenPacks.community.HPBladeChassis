@@ -24,7 +24,11 @@
     <tr tal:define="odd repeat/gd/odd; link gd/managedDeviceLink"
         tal:attributes="class python:test(odd, 'odd', 'even')">
         <td class="tablevalues">
-        <span tal:content="structure gd/urlLink"/>
+        <span>
+		<a tal:attributes="href gd/getPrimaryUrlPath"
+		 tal:content="gd/titleOrId"
+		 target="_top"></a>
+	</span>
         <span tal:condition="link" tal:omit-tag>
                  (<span tal:replace="structure gd/managedDeviceLink"/>)
             </span>

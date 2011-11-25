@@ -51,12 +51,14 @@ class BladeChassis(CommandPlugin):
 
                 if "Serial Number" in key:
                     om.bcSerialNumber = value
+                    om.setHWSerialNumber = value
 
                 if "UUID" in key:
                     om.bcUUID = value
 
                 if "Asset Tag" in key:
                     om.bcAssetTag = value
+                    om.setHWTag = value
 
                 if "PDU Type" in key:
                     om.bcPduType = value
