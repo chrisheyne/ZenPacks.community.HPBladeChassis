@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:zcml="http://namespaces.zope.org/zcml">
+
+    <configure zcml:condition="installed Products.Zuul">
+
+        <adapter factory=".info.BladeServerInfo"
+                 for=".BladeServer.BladeServer"
+                 provides=".interfaces.IBladeServerInfo"
+                 />
+                 
+        <adapter factory=".info.BladeChassisInterconnectInfo"
+                 for=".BladeChassisInterconnect.BladeChassisInterconnect"
+                 provides=".interfaces.IBladeChassisInterconnectInfo"
+                 />
+                 
+        <adapter factory=".info.BladeChassisFanInfo"
+                 for=".BladeChassisFan.BladeChassisFan"
+                 provides=".interfaces.IBladeChassisFanInfo"
+                 />
+                 
+        <adapter factory=".info.BladeChassisPsuInfo"
+                 for=".BladeChassisPsu.BladeChassisPsu"
+                 provides=".interfaces.IBladeChassisPsuInfo"
+                 />
+
+        <browser:resourceDirectory
+                 name="HPBladeChassis"
+                 directory="resources"
+                 />
+
+        <browser:viewlet
+                 name="js-HPBladeChassis"
+                 paths="/++resource++HPBladeChassis/HPBladeChassis.js"
+                 weight="10"
+                 manager="Products.ZenUI3.browser.interfaces.IJavaScriptSrcManager"
+                 class="Products.ZenUI3.browser.javascript.JavaScriptSrcBundleViewlet"
+                 permission="zope2.Public"
+                 />
+    </configure>
+</configure>
